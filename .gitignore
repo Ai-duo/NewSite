@@ -1,0 +1,18 @@
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+app/release/NewSite_six_t_192X96E_v1.5.zip
+app/release/NewSite_six_tw2_256X128E_v1.5.apk
+app/release/NewSite_six_tw2_256X128E_v1.5.zip
+app/release/NewSite_v1.5 (2)192X96-E26-6要素.apk
