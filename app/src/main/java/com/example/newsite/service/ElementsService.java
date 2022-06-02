@@ -91,7 +91,7 @@ public class ElementsService extends Service {
         }).start();*/
     }
 
-    Thread thread;
+    Thread thread,thread1;
     private boolean openPm = false;
 
     private void startGetUart() {
@@ -178,7 +178,7 @@ public class ElementsService extends Service {
                                         bright = false;
                                         start = false;
                                         Log.i("TAG_uart1234", builder.toString());
-                                        getElements(builder.toString());
+                                        getElements(port,builder.toString());
                                         OkHttpUploadTool.getInstance().uploadString(UrlList.sitenum, "info:" + builder.toString());
                                         builder.delete(0, builder.length());
                                         Log.i("TAG_uart1234", "END");
@@ -225,6 +225,136 @@ public class ElementsService extends Service {
             }
         });
         thread.start();
+        thread1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                do {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Log.i("TAG_uart", "正在获取uart======================");
+                } while (null == uart);
+                try {
+                    //监听/dev/ttyMT2，获取数据/dev/s3c2410_serial3
+                    uart.read(port1, new IUartListener.Stub() {
+                        @Override
+                        public void onReceive(BytesData data) throws RemoteException {
+                            Log.i("TAG_uart", "========获取到串口数据===========");
+                            if (!PmFlag) {
+                                for (byte a : data.getData()) {
+                                    String s1 = "0x" + Integer.toHexString(a & 0xFF) + " ";
+                                    char ss = (char) a;
+                                    Log.i("TAG_uart", "ss:" + ss + ";s1:" + s1);
+                                    if (ss == 'D') {
+                                        dmgd = true;
+                                        start = true;
+                                        builder.append(ss);
+                                    } else if (ss == 'W') {
+                                        weaf = true;
+                                        start = true;
+                                        builder.append(ss);
+                                    } else if (ss == 'O') {
+                                        timing = true;
+                                        start = true;
+                                        builder.append(ss);
+                                    } else if (ss == 'B') {
+                                        bright = true;
+                                        start = true;
+                                        builder.append(ss);
+                                    } else if (start) {
+                                        start = true;
+                                        builder.append(ss);
+                                    }
+                                    Log.i("TAG_uart123", builder.toString());
+                                    if (builder.length() == 1) {
+                                        //||!builder.toString().equals("FE")
+                                        if (!builder.toString().equals("D") && !builder.toString().equals("W") && !builder.toString().equals("O") && !builder.toString().equals("B")) {
+                                            builder.delete(0, builder.length());
+                                            dmgd = false;
+                                            weaf = false;
+                                            timing = false;
+                                            bright = false;
+                                            start = false;
+                                        }
+                                    }
+                                    if (builder.length() == 2) {
+                                        //||!builder.toString().equals("FE")
+                                        if (!builder.toString().equals("DM") && !builder.toString().equals("WE") && !builder.toString().equals("ON") && !builder.toString().equals("BR")) {
+                                            builder.delete(0, builder.length());
+                                            dmgd = false;
+                                            weaf = false;
+                                            timing = false;
+                                            bright = false;
+                                            start = false;
+                                        }
+                                    }
+                                    if (builder.length() == 4) {
+                                        //||!builder.toString().equals("FE")
+                                        if (!builder.toString().equals("DMGD") && !builder.toString().equals("WEAF") && !builder.toString().equals("ONOF") && !builder.toString().equals("BRIG")) {
+                                            builder.delete(0, builder.length());
+                                            dmgd = false;
+                                            weaf = false;
+                                            timing = false;
+                                            bright = false;
+                                            start = false;
+                                        }
+                                    }
+                                    if (((dmgd && 'T' == ss) || (';' == ss && (weaf || timing || bright))) && builder.length() > 4) {
+                                        dmgd = false;
+                                        weaf = false;
+                                        timing = false;
+                                        bright = false;
+                                        start = false;
+                                        Log.i("TAG_uart1234", builder.toString());
+                                        getElements(port1,builder.toString());
+                                        OkHttpUploadTool.getInstance().uploadString(UrlList.sitenum, "info:" + builder.toString());
+                                        builder.delete(0, builder.length());
+                                        Log.i("TAG_uart1234", "END");
+                                    }
+
+                                }
+                            } else {
+                                for (byte b : data.getData()) {
+                                    byteArrayList.add(b);
+                                    if ((int) byteArrayList.get(0) != 21) {
+                                        byteArrayList.clear();
+                                    }
+                                    s2 += "0x" + Integer.toHexString(b & 0xff) + " ";
+                                }
+                                // String ss = StrUtil.bytesToAscii(byteArrayList);
+                                Log.i("TAG", "收到的PM：" + s2 + ";byteArrayList:" + byteArrayList.size());
+                                //Log.i("TAG", "收到的PM：" + ss);
+                                if (byteArrayList.size() >= 21) {
+                                    int b1 = (int) byteArrayList.get(0);
+                                    int b2 = (int) byteArrayList.get(1);
+                                    int b3 = (int) byteArrayList.get(2);
+                                    Log.i("TAG", "b1:" + b1 + ";" + "b2:" + b2 + ";" + "b3:" + b3 + ";");
+                                    if (b1 == 21 && b2 == 3 && b3 == 16) {
+                                        int pm = Integer.parseInt(Integer.toHexString(byteArrayList.get(7) & 0xff), 16) * 256 + Integer.parseInt(Integer.toHexString(byteArrayList.get(8) & 0xff), 16);
+                                        Log.i("TAG", "pm1:" + byteArrayList.get(7) + ";" + "pm2:" + Integer.parseInt(Integer.toHexString(byteArrayList.get(8) & 0xff), 16) + ";");
+                                        Log.i("TAG", "pm:" + pm);
+                                        //  MainActivity.pm_text = "PM2.5:" + pm + "ug/m³";
+                                        // Log.i("TAG", "pm_text:" + MainActivity.pm_text);
+                                        byteArrayList.clear();
+                                        PmFlag = false;
+                                        s2 = "";
+                                        OkHttpUploadTool.getInstance().uploadString(UrlList.sitenum, "PM2.5:" + pm + "ug/m³");
+                                    } else {
+                                        byteArrayList.clear();
+                                        s2 = "";
+                                    }
+                                }
+                            }
+                        }
+                    });
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread1.start();
     }
 
     Timer weaTimer;
@@ -319,11 +449,12 @@ public class ElementsService extends Service {
     //能见度
     String njd = "--";//26
     static String WEA;
-    String port = "/dev/ttysWK2";//,/dev/ttysWK2   /dev/ttyMT3
+    String port = "/dev/ttysWK0";//,/dev/ttysWK2   /dev/ttyMT3
+    String port1  = "/dev/ttysWK2";
     //判断是否重启,每十分钟判断一次sendCount与currentCount的值，如果两者相等就重起；
     int sendCount = 0, currentCount = -1;
 
-    public void getElements(String info) {
+    public void getElements(String port,String info) {
         //builder.delete(0, builder.length());
         //开始接受PM2.5数据
         Log.i("TAG", "getElements:");

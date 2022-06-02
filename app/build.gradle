@@ -23,7 +23,7 @@ android {
         variant.outputs.all { output ->
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                outputFileName = "NewSite_six_tw2_256X128E_v${defaultConfig.versionName}.apk"
+                outputFileName = "NewSite_six_tw_192X96E_v${defaultConfig.versionName}.apk"
             }
         }
     }
