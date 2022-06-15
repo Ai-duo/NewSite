@@ -291,7 +291,7 @@ public class ElementsService extends Service {
             if (chars1[j] == '1') {
                 count++;
             }
-            if (j == 0 || j == 1 || j == 12 || j == 14 || j == 15 || j == 17 || j == 20 || j == 21 || j == 25 || j == 55) {
+            if (j == 0 || j == 1 || j == 12 || j == 14 || j == 15 || j == 17 || j == 20 || j == 21 || j == 25 || j == 55||j==67) {
                 index.add(count - 1);
             }
         }
@@ -304,6 +304,8 @@ public class ElementsService extends Service {
     String fs = "--";//2
     //降水
     String js = "--";//13
+    //小时雨量    68
+    String hour_yl = "--";
     //温度
     String wd = "--";
     //日最大温度
@@ -549,7 +551,20 @@ public class ElementsService extends Service {
             } catch (Exception e) {
                 Log.i("TAG_", "解析能见度时出错");
             }
-            LiveDataBus.getInstance().setElements(new Elements("语溪小学气象站", date, time, wd, max_wd, min_wd, sd, min_sd, fx, fs, js, qy, njd));
+            try {
+                if (infoss[4].charAt(67) == '1') {
+                    String js1 = infoss[qc + index.get(10)];
+                    Log.i("TAG", "降水:" + js1);
+                    if (!isNum(js1)) {
+                        // js = "";
+                    } else {
+                        hour_yl = Float.parseFloat(js1) / 10 + "";
+                    }
+                }
+            } catch (Exception e) {
+                Log.i("TAG_", "解析雨量时出错");
+            }
+            LiveDataBus.getInstance().setElements(new Elements("语溪小学气象站", date, time, wd, max_wd, min_wd, sd, min_sd, fx, fs, hour_yl, qy, njd));
             sendCount++;
         }
 
