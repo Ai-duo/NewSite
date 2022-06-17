@@ -10,21 +10,21 @@ import java.util.Date;
 
 public class Elements {
     //日期、时间、温度、湿度、风向、风速度、降水、气压
-    String date;
-    String time;
-    String wd;
-    String max_wd;
-    String min_wd;
-    String sd;
-    String min_sd;
-    String fx;
-    String fs;
-    String js;
-    String qy;
-    String njd;
-    String wea;
-    String bright;
-    String title;
+   public  String date;
+    public   String time;
+    public  String wd;
+    public    String max_wd;
+    public   String min_wd;
+    public   String sd;
+    public   String min_sd;
+    public   String fx;
+    public  String fs;
+    public   String js;
+    public   String qy;
+    public   String njd;
+    public   String wea;
+    public   String bright;
+    public   String title;
     int index;
 
     public String getTitle() {

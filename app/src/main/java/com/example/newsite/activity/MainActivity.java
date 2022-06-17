@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
         stopService(intent);
     }
     private void setAllObserve() {
-        LiveDataBus.getInstance().getElementsMutableLiveData().observe(this, new Observer<Elements>() {
+        LiveDataBus.get().with("element",Elements.class).observe(this, new Observer<Elements>() {
             @Override
             public void onChanged(Elements elements) {
                 //处理六要素
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 elementFragment.updateText(SiteSets.getSiteTextSet().getLeftText(elements),SiteSets.getSiteTextSet().getRightText(elements));
             }
         });
-        LiveDataBus.getInstance().getWeaInfoMutableLiveData().observe(this, new Observer<String>() {
+        LiveDataBus.get().with("oxy",String.class).observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
                 //处理天气
@@ -180,19 +180,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        LiveDataBus.getInstance().getAlarmInfoMutableLiveData().observe(this, new Observer<AlarmInfo>() {
-            @Override
-            public void onChanged(AlarmInfo alarmInfo) {
-                //处理预警
-                Log.i("MainActivity", "处理预警------------");
-            }
-        });
-        LiveDataBus.getInstance().getSiteInfoMutableLiveData().observe(this, new Observer<SiteInfo>() {
-            @Override
-            public void onChanged(SiteInfo siteInfo) {
-                //处理自动站
-                Log.i("MainActivity", "处理自动站--------------");
-            }
-        });
     }
 }

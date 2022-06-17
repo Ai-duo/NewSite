@@ -44,8 +44,8 @@ import okhttp3.Response;
 public class ElementsService extends Service {
     public IUartService uart;
     StringBuffer builder = new StringBuffer();
-    boolean start = false;
-    boolean dmgd = false, weaf = false, timing = false, bright = false;
+    boolean start = false,start6 =false;
+    boolean dmgd = false, weaf = false, timing = false, bright = false,oxys = false;
     ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
@@ -67,6 +67,7 @@ public class ElementsService extends Service {
         weaTimer();
         bindCardSystemUartAidl();
         startGetUart();
+        startOxy();
       /*  final String in = "DMGD WX001 2021-03-17 16:45 1111111111111011111111111111110000000000000000000000000000000000001110000000000000000000000000000001100000000000000000000001000000000000000 00000000000000000080000000000000000 98 53 102 48 100 59 1605 98 54 101 95 1606 0 218 227 1601 218 1645 * 72 69 1601 188 165 10108 10108 1617 10106 1601 10126 0 00 98 71 000000000000000000000000000000000000000000000 *5B *33 T";
         Timer timer = new Timer();
 
@@ -91,8 +92,21 @@ public class ElementsService extends Service {
         }).start();*/
     }
 
-    Thread thread;
+
+    Thread thread,thread1,thread2,thread3,thread4,thread5,thread6;
     private boolean openPm = false;
+    StringBuffer dmgdBuffer = new StringBuffer();
+    StringBuffer dm1dBuffer = new StringBuffer();
+    StringBuffer dmrdBuffer = new StringBuffer();
+    StringBuffer dm5dBuffer = new StringBuffer();
+    StringBuffer dmsdBuffer = new StringBuffer();
+    StringBuffer dmaqBuffer = new StringBuffer();
+    StringBuffer oxyBuffer = new StringBuffer();
+    String DMGD ="TAG_DMGD";
+    String DMRD ="TAG_DMrD";
+    String DM1D ="TAG_DM1D";
+    String DM5D ="TAG_DM5D";
+    String DMAQ ="TAG_DMAQ";
 
     private void startGetUart() {
         thread = new Thread(new Runnable() {
@@ -226,6 +240,69 @@ public class ElementsService extends Service {
         });
         thread.start();
     }
+    private void startOxy(){
+        thread6 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                do {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Log.i(DMGD, "正在获取uart======================");
+                } while (null == uart);
+                try {
+                    //监听/dev/ttyMT2，获取数据/dev/s3c2410_serial3
+                    uart.read(port, new IUartListener.Stub() {
+                        @Override
+                        public void onReceive(BytesData data) throws RemoteException {
+                            Log.i(DMAQ, "========获取到串口数据===========");
+                            for (byte a : data.getData()) {
+                                String s1 = "0x" + Integer.toHexString(a & 0xFF) + " ";
+                                char ss = (char) a;
+                                Log.i(DMAQ, "ss:" + ss + ";s1:" + s1);
+                                if (start6) {
+                                    start6 = true;
+                                    oxyBuffer.append(ss);
+                                } else if (ss == 'B') {
+                                    oxys = true;
+                                    start6 = true;
+                                    oxyBuffer.append(ss);
+                                }
+                                Log.i(DMAQ, oxyBuffer.toString());
+                                if (oxyBuffer.length() == 1) {
+                                    if (!oxyBuffer.toString().equals("B")) {
+                                        oxyBuffer.delete(0, oxyBuffer.length());
+                                        oxys = false;
+                                        start6 = false;
+                                    }
+                                } else if (oxyBuffer.length() == 2) {
+                                    //||!builder.toString().equals("FE")
+                                    if (!oxyBuffer.toString().equals("BG")) {
+                                        oxyBuffer.delete(0, oxyBuffer.length());
+                                        oxys = false;
+                                        start6 = false;
+                                    }
+                                }
+                                if (oxyBuffer.length() > 4 && (oxys && oxyBuffer.substring(oxyBuffer.length() - 2).equals("ED"))) {
+                                    oxys = false;
+                                    start6 = false;
+                                    Log.i(DMAQ, oxyBuffer.toString());
+                                    getOxy(oxyBuffer.toString());
+                                    oxyBuffer.delete(0, oxyBuffer.length());
+                                }
+
+                            }
+                        }
+                    });
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread6.start();
+    }
 
     Timer weaTimer;
 
@@ -249,7 +326,7 @@ public class ElementsService extends Service {
                         // site_name = json.optString("wea_logo");
                         if (!TextUtils.isEmpty(Info)) {
                             EventBus.getDefault().post(dayinfo);
-                            LiveDataBus.getInstance().setWeaInfo(dayinfo);
+                           // LiveDataBus.getInstance().setWeaInfo(dayinfo);
                             try {
                                 Thread.sleep(60 * 60 * 1000);
                             } catch (InterruptedException e) {
@@ -297,7 +374,18 @@ public class ElementsService extends Service {
         }
         return count;
     }
-
+    String oxy;
+    public void getOxy(String info){
+        if (TextUtils.isEmpty(info)) {
+            return;
+        }
+        if (info.startsWith("BG") && (info.endsWith("ED"))) {
+            String[] iss = info.split(",");
+            oxy = iss[13];
+            oxy = Integer.parseInt(oxy)+"";
+        }
+        LiveDataBus.get().with("oxy").postValue(oxy);
+    }
     //风向
     String fx = "--";//1
     //风速
@@ -549,7 +637,7 @@ public class ElementsService extends Service {
             } catch (Exception e) {
                 Log.i("TAG_", "解析能见度时出错");
             }
-            LiveDataBus.getInstance().setElements(new Elements("语溪小学气象站", date, time, wd, max_wd, min_wd, sd, min_sd, fx, fs, js, qy, njd));
+            LiveDataBus.get().with("element").postValue(new Elements("语溪小学气象站", date, time, wd, max_wd, min_wd, sd, min_sd, fx, fs, js, qy, njd));
             sendCount++;
         }
 

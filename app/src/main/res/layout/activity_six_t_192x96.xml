@@ -35,8 +35,8 @@
     <!--洞头-->
     <LinearLayout
         android:id="@+id/maincontainer"
-        android:layout_width="192px"
-        android:layout_height="96px"
+        android:layout_width="384px"
+        android:layout_height="192px"
         android:background="#000"
         android:orientation="vertical"
         android:screenOrientation="portrait"
@@ -60,7 +60,7 @@
             android:id="@+id/content_fragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="3"
+            android:layout_weight="4"
             android:gravity="center"
             app:context="@{mainActivity}"
             app:timer="@{timer}"

@@ -17,15 +17,19 @@ import androidx.databinding.ViewDataBinding;
 
 import com.example.newsite.BR;
 import com.example.newsite.R;
+import com.example.newsite.add.Elements;
 import com.example.newsite.add.MarqueeView;
 import com.example.newsite.add.SiteSets;
+import com.example.newsite.databinding.ActivitySixT192x96Binding;
+import com.example.newsite.databinding.ElementFragmentBinding;
 
 //import com.xixun.add.ElementActivity;
 public class ElementFragment extends Fragment {
-    ViewDataBinding inflate;
+    ElementFragmentBinding inflate;
     int size;
+    Elements elements;
     Typeface typeface;
-
+String oxy;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -41,6 +45,7 @@ public class ElementFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i("TAG_", "ElementFragment_onCreateView");
+        if (inflate==null)
         inflate = DataBindingUtil.inflate(inflater, R.layout.element_fragment, container, false);
         if (size > 0) {
             inflate.setVariable(BR.textSize, size);
@@ -48,9 +53,8 @@ public class ElementFragment extends Fragment {
         if (typeface != null) {
             inflate.setVariable(BR.typeFace, typeface);
         }
-        inflate.setVariable(BR.orientation, SiteSets.getSiteTextSet().orientation);
-        inflate.setVariable(BR.rightText, SiteSets.getSiteTextSet().SixRightText);
-        inflate.setVariable(BR.leftText, SiteSets.getSiteTextSet().SixLeftText);
+        if(elements!=null)inflate.setElement(elements);
+        if(oxy!=null)inflate.setOxy(oxy);
         return inflate.getRoot();
     }
 
@@ -118,7 +122,20 @@ public class ElementFragment extends Fragment {
             inflate.setVariable(BR.rightText, rightText);
         }
     }
+    public void updateElements(Elements elements) {
 
+       this.elements = elements;
+       if(inflate!=null){
+           inflate.setElement(elements);
+       }
+    }
+    public void updateOxy(String oxy) {
+
+        this.oxy = oxy;
+        if(inflate!=null){
+            inflate.setOxy(oxy);
+        }
+    }
     public void setSizeAndType(int size, Typeface typeFace) {
         if (size > 0) {
             this.size = size;

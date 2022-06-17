@@ -1,63 +1,266 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <data>  
-                <variable
-                    name="textSize"
-                    type="java.lang.Integer" />
-                <variable
-                    name="leftText"
-                    type="java.lang.String" />
-                <variable
-                    name="rightText"
-                    type="java.lang.String" />
-                <variable
-                    name="typeFace"
-                    type="android.graphics.Typeface" />
-                <variable
-                        name="orientation"
-                        type="java.lang.Integer"/>
-        </data>
+    <data>
+
+        <variable
+            name="textSize"
+            type="java.lang.Integer" />
+
+        <variable
+            name="leftText"
+            type="java.lang.String" />
+
+        <variable
+            name="rightText"
+            type="java.lang.String" />
+        <variable
+            name="oxy"
+            type="java.lang.String" />
+        <variable
+            name="element"
+            type="com.example.newsite.add.Elements" />
+
+        <variable
+            name="typeFace"
+            type="android.graphics.Typeface" />
+
+        <variable
+            name="orientation"
+            type="java.lang.Integer" />
+    </data>
+
+    <LinearLayout
+        android:background="#000"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:background="#000"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="3"
             android:gravity="center"
-            android:screenOrientation="portrait"
             android:orientation="horizontal"
-            >
-                <!-- app:setOrientation="@{orientation}"-->
+            android:screenOrientation="portrait">
+            <!-- app:setOrientation="@{orientation}"-->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
                 <TextView
-                    android:textColor="#f00"
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
                     android:layout_marginLeft="1px"
-                    android:text="@{leftText}"
+                    android:layout_weight="9"
+                    android:gravity="center"
+                    android:lineSpacingExtra="9px"
+                    android:text="温度:"
+                    android:textColor="#f00"
                     app:setExtraTextSize="@{textSize}"
-                    app:setExtraTypeface="@{typeFace}"
-                    android:id="@+id/rightText"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    app:setExtraTypeface="@{typeFace}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="9"
+                    android:gravity="center"
+                    android:lineSpacingExtra="9px"
+                    android:text="湿度:"
+                    android:textColor="#f00"
+                    app:setExtraTextSize="@{textSize}"
+                    app:setExtraTypeface="@{typeFace}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="9"
+                    android:gravity="center"
+
+                    android:lineSpacingExtra="9px"
+                    android:text="雨量:"
+                    android:textColor="#f00"
+                    app:setExtraTextSize="@{textSize}"
+                    app:setExtraTypeface="@{typeFace}" />
+
+
+                />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/wd"
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:layout_marginLeft="1px"
                     android:layout_weight="9"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="9px"
-                     />
-<!-- android:lineSpacingExtra="10px"-->
-                <TextView
-                    android:layout_marginLeft="1px"
-                    android:text="@{rightText}"
+                    android:text="@{element.wd}"
+                    android:textColor="#ff0"
                     app:setExtraTextSize="@{textSize}"
-                    app:setExtraTypeface="@{typeFace}"
-                    android:textColor="#f00"
-                    android:id="@+id/leftText"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="11"
+                    app:setExtraTypeface="@{typeFace}" />
+
+                <TextView
+                    android:id="@+id/sd"
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="9"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="9px"
+                    android:text="@{element.sd}"
+                    android:textColor="#ff0"
+                    app:setExtraTextSize="@{textSize}"
+                    app:setExtraTypeface="@{typeFace}" />
+
+                <TextView
+                    android:id="@+id/yl"
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="9"
+                    android:gravity="center_vertical"
+                    android:text="@{element.js}"
+                    android:textColor="#ff0"
+                    app:setExtraTextSize="@{textSize}"
+                    app:setExtraTypeface="@{typeFace}"
+
                     />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="9"
+                    android:gravity="center"
+                    android:lineSpacingExtra="9px"
+                    android:text="风速:"
+                    android:textColor="#f00"
+                    app:setExtraTextSize="@{textSize}"
+                    app:setExtraTypeface="@{typeFace}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="9"
+                    android:gravity="center"
+                    android:lineSpacingExtra="9px"
+                    android:text="风向:"
+                    android:textColor="#f00"
+                    app:setExtraTextSize="@{textSize}"
+                    app:setExtraTypeface="@{typeFace}" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="9"
+                    android:gravity="center"
+                    android:lineSpacingExtra="9px"
+                    android:text="气压:"
+                    android:textColor="#f00"
+                    app:setExtraTextSize="@{textSize}"
+                    app:setExtraTypeface="@{typeFace}" />
+
                 />
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/fs"
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="9"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="9px"
+                    android:text="@{element.fs}"
+                    android:textColor="#ff0"
+                    app:setExtraTextSize="@{textSize}"
+                    app:setExtraTypeface="@{typeFace}" />
+
+                <TextView
+                    android:id="@+id/fx"
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="9"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="9px"
+                    android:text="@{element.fx}"
+                    android:textColor="#ff0"
+                    app:setExtraTextSize="@{textSize}"
+                    app:setExtraTypeface="@{typeFace}" />
+
+                <TextView
+                    android:id="@+id/qy"
+                    android:layout_width="match_parent"
+                    android:layout_height="0px"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="9"
+                    android:gravity="center_vertical"
+                    android:lineSpacingExtra="9px"
+                    android:text="@{element.qy}"
+                    android:textColor="#ff0"
+                    app:setExtraTextSize="@{textSize}"
+                    app:setExtraTypeface="@{typeFace}" />
+
+                />
+            </LinearLayout>
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="1"
+                    android:gravity="center"
+
+                    android:lineSpacingExtra="9px"
+                    android:text="负氧离子:"
+                    android:textColor="#f00"
+                    app:setExtraTextSize="@{textSize}"
+                    app:setExtraTypeface="@{typeFace}" />
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="1px"
+                    android:layout_weight="2"
+                    android:gravity="center_vertical"
+
+                    android:lineSpacingExtra="9px"
+                    android:text="@{oxy}"
+                    android:textColor="#0f0"
+                    app:setExtraTextSize="@{textSize}"
+                    app:setExtraTypeface="@{typeFace}" />
+        </LinearLayout>
+    </LinearLayout>
 </layout>
 
