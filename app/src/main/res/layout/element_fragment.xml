@@ -105,7 +105,7 @@
                     android:layout_weight="9"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="9px"
-                    android:text="@{element.wd}"
+                    android:text="@{element.wd+`℃`}"
                     android:textColor="#ff0"
                     app:setExtraTextSize="@{textSize}"
                     app:setExtraTypeface="@{typeFace}" />
@@ -118,7 +118,7 @@
                     android:layout_weight="9"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="9px"
-                    android:text="@{element.sd}"
+                    android:text="@{element.sd+`%`}"
                     android:textColor="#ff0"
                     app:setExtraTextSize="@{textSize}"
                     app:setExtraTypeface="@{typeFace}" />
@@ -130,7 +130,7 @@
                     android:layout_marginLeft="1px"
                     android:layout_weight="9"
                     android:gravity="center_vertical"
-                    android:text="@{element.js}"
+                    android:text="@{element.js+`mm`}"
                     android:textColor="#ff0"
                     app:setExtraTextSize="@{textSize}"
                     app:setExtraTypeface="@{typeFace}"
@@ -197,7 +197,7 @@
                     android:layout_weight="9"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="9px"
-                    android:text="@{element.fs}"
+                    android:text="@{element.fs+`m/s`}"
                     android:textColor="#ff0"
                     app:setExtraTextSize="@{textSize}"
                     app:setExtraTypeface="@{typeFace}" />
@@ -223,7 +223,7 @@
                     android:layout_weight="9"
                     android:gravity="center_vertical"
                     android:lineSpacingExtra="9px"
-                    android:text="@{element.qy}"
+                    android:text="@{element.qy+`hPa`}"
                     android:textColor="#ff0"
                     app:setExtraTextSize="@{textSize}"
                     app:setExtraTypeface="@{typeFace}" />
@@ -248,18 +248,19 @@
                     android:textColor="#f00"
                     app:setExtraTextSize="@{textSize}"
                     app:setExtraTypeface="@{typeFace}" />
-                <TextView
-                    android:layout_width="0px"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="1px"
-                    android:layout_weight="2"
-                    android:gravity="center_vertical"
 
-                    android:lineSpacingExtra="9px"
-                    android:text="@{oxy}"
-                    android:textColor="#0f0"
-                    app:setExtraTextSize="@{textSize}"
-                    app:setExtraTypeface="@{typeFace}" />
+            <TextView
+                android:layout_width="0px"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="1px"
+                android:layout_weight="2"
+                android:gravity="center_vertical"
+
+                android:lineSpacingExtra="9px"
+                android:text="@{oxy}"
+                android:textColor="#0f0"
+                app:setExtraTextSize="@{textSize}"
+                app:setExtraTypeface="@{typeFace}" />
         </LinearLayout>
     </LinearLayout>
 </layout>

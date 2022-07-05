@@ -36,7 +36,7 @@
     <LinearLayout
         android:id="@+id/maincontainer"
         android:layout_width="384px"
-        android:layout_height="192px"
+        android:layout_height="224px"
         android:background="#000"
         android:orientation="vertical"
         android:screenOrientation="portrait"

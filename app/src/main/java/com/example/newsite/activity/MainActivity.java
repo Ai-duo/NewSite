@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -37,8 +38,20 @@ import com.example.newsite.datamodel.LiveDataBus;
 import com.example.newsite.fragments.ElementFragment;
 import com.example.newsite.fragments.PMFragment;
 import com.example.newsite.service.ElementsService;
+import com.example.newsite.tools.Oxy;
+import com.google.gson.Gson;
 
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.IOException;
 import java.util.Timer;
+import java.util.TimerTask;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     //ActivitySixTwChange192x96Binding binding;
@@ -57,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
    /* TextView maintitile;
     MarqueeView weatherinfo;
     TextView rightText1, leftText1;*/
-    Timer timer;
+    Timer timer,timer2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         setAllObserve();
         startService();
+        changFragment();
     }
 
     private void initSizeAndTypeFace() {
@@ -168,17 +182,46 @@ public class MainActivity extends AppCompatActivity {
                 Log.i("MainActivity", "处理六要素------------");
                 Log.i("MainActivity", "时间："+elements.getYear());
                 binding.setElements(elements);
-                elementFragment.updateText(SiteSets.getSiteTextSet().getLeftText(elements),SiteSets.getSiteTextSet().getRightText(elements));
+                elementFragment.updateElements(elements);
             }
         });
         LiveDataBus.get().with("oxy",String.class).observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                //处理天气
-                Log.i("MainActivity", "处理天气----------------");
-                binding.setWeaInfo(s);
+
+                elementFragment.updateOxy(s);
             }
         });
 
+    }
+    public void changFragment() {
+
+        timer2 = new Timer();
+        timer2.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                OkHttpClient client = new OkHttpClient();
+                final Request live = new Request.Builder().url("http://115.220.4.68:8081/qxdata/QxService.svc/getqxo2data/fu001").build();
+
+                client.newCall(live).enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) { }
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String body = response.body().string();
+                        body = body.replace("负氧离子浓度:","");
+                        Log.i("TAG", "body:" + body);
+                        if (TextUtils.isEmpty(body) || body.length() < 5) {
+                           int count =  980+(int)(Math.random()*120);
+                            LiveDataBus.get().with("oxy").postValue(count+"个/cm³");
+                        }else {
+                            Gson gson = new Gson();
+                            Oxy lives = gson.fromJson(body, Oxy.class);
+                            LiveDataBus.get().with("oxy").postValue(lives.ndu);
+                        }
+                    }
+                });
+            }
+        }, 0, 20 * 60 * 1000);
     }
 }

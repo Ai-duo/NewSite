@@ -29,7 +29,8 @@ public class ElementFragment extends Fragment {
     int size;
     Elements elements;
     Typeface typeface;
-String oxy;
+    String oxy;
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -45,16 +46,16 @@ String oxy;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.i("TAG_", "ElementFragment_onCreateView");
-        if (inflate==null)
-        inflate = DataBindingUtil.inflate(inflater, R.layout.element_fragment, container, false);
+        if (inflate == null)
+            inflate = DataBindingUtil.inflate(inflater, R.layout.element_fragment, container, false);
         if (size > 0) {
             inflate.setVariable(BR.textSize, size);
         }
         if (typeface != null) {
             inflate.setVariable(BR.typeFace, typeface);
         }
-        if(elements!=null)inflate.setElement(elements);
-        if(oxy!=null)inflate.setOxy(oxy);
+        if (elements != null) inflate.setElement(elements);
+        if (oxy != null) inflate.setOxy(oxy);
         return inflate.getRoot();
     }
 
@@ -122,20 +123,23 @@ String oxy;
             inflate.setVariable(BR.rightText, rightText);
         }
     }
+
     public void updateElements(Elements elements) {
 
-       this.elements = elements;
-       if(inflate!=null){
-           inflate.setElement(elements);
-       }
+        this.elements = elements;
+        if (inflate != null) {
+            inflate.setElement(elements);
+        }
     }
-    public void updateOxy(String oxy) {
 
+    public void updateOxy(String oxy) {
+        Log.i("TAG", "oxy"+oxy);
         this.oxy = oxy;
-        if(inflate!=null){
+        if (inflate != null) {
             inflate.setOxy(oxy);
         }
     }
+
     public void setSizeAndType(int size, Typeface typeFace) {
         if (size > 0) {
             this.size = size;

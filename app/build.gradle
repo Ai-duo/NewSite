@@ -23,7 +23,7 @@ android {
         variant.outputs.all { output ->
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                outputFileName = "NewSite_six_tw2_256X128E_v${defaultConfig.versionName}.apk"
+                outputFileName = "NewSite_six_t_382X224_v${defaultConfig.versionName}.apk"
             }
         }
     }
@@ -53,6 +53,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'org.greenrobot:eventbus:3.0.0'
     implementation 'com.squareup.okhttp3:okhttp:3.12.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
     implementation ('com.github.joeyupdo:YJTools:v1.0.5',{
         exclude group: 'com.android.support'
     })
