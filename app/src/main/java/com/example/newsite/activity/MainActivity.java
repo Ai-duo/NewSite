@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
     //ActivityFourTw320x160Binding binding;
    // ActivityFourTw192x96Binding binding;
    // ActivityFourTw256x128Binding binding;
-    //ActivitySixT256x128Binding binding;
-    ActivitySixT192x96Binding binding;
+    ActivitySixT256x128Binding binding;
+    //ActivitySixT192x96Binding binding;
     //ActivitySixTw2256x128Binding binding;
     ElementFragment elementFragment;
     PMFragment pmFragment;

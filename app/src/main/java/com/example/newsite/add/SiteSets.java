@@ -19,7 +19,7 @@ public class SiteSets {
      * @return
      */
     public static SiteSet getSiteTextSet(){
-        return six_t_192X96;
+        return six_t_256X128;
     }
 
 }
